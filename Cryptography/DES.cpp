@@ -252,7 +252,7 @@ class DES {
 		return T3;
 	}
 
-	Bitset Encrypt(string m) {
+	Bitset Crypt(string m, int mode) {
 		Bitset M(m);
 		Bitset L[17], R[17];
 		for(int i = 0;i < 17;i++) {
@@ -263,27 +263,7 @@ class DES {
 		for(int i = 4, k = -1;i < 8;i++) for(int j = 0;j < 8;j++) R[0].set(++k, M.pos(IP[i][j]-1));
 		for(int i = 1;i <= 16;i++) {
 			L[i].equate(R[i-1]);
-			Bitset T3 = f(R[i-1], K[i]);
-			for(int j = 0;j < 32;j++) R[i].set(j, L[i-1].pos(j) ^ T3.pos(j));
-		}
-		Bitset bs(64), C(64);
-		for(int i = 0;i < 32;i++) bs.set(i, R[16].pos(i));
-		for(int i = 32;i < 64;i++) bs.set(i, L[16].pos(i-32));
-		for(int p = 0, k = -1;p < 8;p++) for(int q = 0;q < 8;q++) C.set(++k, bs.pos(IPi[p][q]-1));
-		return C;
-	}
-	Bitset Decrypt(string c) {
-		Bitset M(c);
-		Bitset L[17], R[17];
-		for(int i = 0;i < 17;i++) {
-			L[i].length = 32;
-			R[i].length = 32;
-		}
-		for(int i = 0, k = -1;i < 4;i++) for(int j = 0;j < 8;j++) L[0].set(++k, M.pos(IP[i][j]-1));
-		for(int i = 4, k = -1;i < 8;i++) for(int j = 0;j < 8;j++) R[0].set(++k, M.pos(IP[i][j]-1));
-		for(int i = 1;i <= 16;i++) {
-			L[i].equate(R[i-1]);
-			Bitset T3 = f(R[i-1], K[17-i]);
+			Bitset T3 = f(R[i-1], K[mode == 1 ? i : 17 - i]);
 			for(int j = 0;j < 32;j++) R[i].set(j, L[i-1].pos(j) ^ T3.pos(j));
 		}
 		Bitset bs(64), C(64);
@@ -295,11 +275,11 @@ class DES {
 };
 
 int main() {
-	string k = "0100111110010010000010111101111100001110000110101011100110110011"; //sample 64-bit key (after adding 8 parity bits)
-	string m = "0000100101001010001010100101001011001000001110000111100100110010"; //sample 64-bit message
+	string k = "0001001100110100010101110111100110011011101111001101111111110001"; //sample 64-bit key (after adding 8 parity bits)
+	string m = "0000000100100011010001010110011110001001101010111100110111101111"; //sample 64-bit message
 	DES D(k);
-	Bitset c = D.Encrypt(m);
-	Bitset p = D.Decrypt(c.get());
+	Bitset c = D.Crypt(m, 1); // mode 1 for encryption
+	Bitset p = D.Crypt(c.get(), 0); //mode 0 for decryption
 	cout<<"Message: \t\t"<<m<<endl;
 	cout<<"Ciphertext: \t\t"<<c.get()<<endl;
 	cout<<"Decrypted plaintext: \t"<<p.get()<<endl;
