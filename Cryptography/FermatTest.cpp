@@ -22,6 +22,8 @@ long int MExp(long int x, unsigned long int y, int p) {
 }
 
 int Fermat(int n, int t) {
+	if(n == 2) return 1;
+	if(n == 1) return 0;
 	if(n % 2 == 0) return 0;
 	for(int i = 0;i < t;i++) {
 		int a = getRand(n-2), r = MExp(a, n - 1, n);
@@ -36,5 +38,5 @@ int main() {
 	cin>>n;
 	cout<<"Enter security parameter: ";
 	cin>>t;
-	cout<<n<<" is "<<(Fermat(n, t) ? "prime" : "composite")<<endl;
+	cout<<n<<" is "<<(Fermat(n, t) ? "prime" : "not prime")<<endl;
 }
