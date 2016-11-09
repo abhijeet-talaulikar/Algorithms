@@ -1,17 +1,22 @@
 #include<iostream>
 using namespace std;
 
-int Inverse(int c, int p) {
-	int i = 0;
-	while(1) if((c * (i++)) % p == 1) return i-1;
-	return 0;
+long int ModExp(long int x, unsigned long int y, int p) {
+	long int res = 1;
+	x = x % p;
+	while (y > 0) {
+		if (y & 1) res = (res*x) % p;
+		y = y>>1;
+		x = (x*x) % p;
+	}
+	return res;
 }
 
 int main() {
 	int p, n;
-	cout<<"Enter modulus p: ";
+	cout<<"Enter prime modulus p: ";
 	cin>>p;
 	cout<<"Enter number between 0 and p-1: ";
 	cin>>n;
-	cout<<"("<<n<<"^-1) mod "<<p<<" = "<<Inverse(n, p)<<endl;
+	cout<<"("<<n<<"^-1) mod "<<p<<" = "<<ModExp(n, p - 2, p)<<endl;
 }
