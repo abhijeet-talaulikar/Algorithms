@@ -10,7 +10,7 @@ int getRand(int max) {
 	return (rand() % range + 2);
 }
 
-long int ModExp(long int x, unsigned long int y, int p) {
+long int MExp(long int x, unsigned long int y, int p) {
 	long int res = 1;
 	x = x % p;
 	while (y > 0) {
