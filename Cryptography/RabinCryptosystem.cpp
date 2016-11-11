@@ -10,6 +10,12 @@ class Rabin {
 	Rabin() {
 		KeyGen();
 	}
+
+	int solveCongruence(int c, int a, int n) {
+		int i = 0;
+		while(1) if((c * (i++)) % n == 1) return i-1;
+		return 0;
+	}
 	
 	Rabin(long int P, long int Q) {
 		KeyGen(P, Q);
@@ -42,6 +48,7 @@ class Rabin {
 
 		return gcd;
 	}
+
 	
 	void KeyGen(long int P = 0, long int Q = 0) {
 		if(P && Q) {
@@ -89,9 +96,9 @@ class Rabin {
 		y = (this->a * this->P * s - this->b * this->Q * r) % this->N;
 		cout<<"Square roots of ciphertext: "<<endl;
 		cout<<x<<endl;
-		cout<<(-1 * x) % this->N<<endl;
+		cout<<solveCongruence(x, this->N - 1, this->N)<<endl;
 		cout<<y<<endl;
-		cout<<(-1 * y) % this->N<<endl;
+		cout<<solveCongruence(y, this->N - 1, this->N)<<endl;
 	}
 };
 
